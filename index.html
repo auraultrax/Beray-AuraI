@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!--
+  Güvenlik politikası: sayfa yalnızca kendi dosyalarını, WebLLM kütüphanesini (jsDelivr)
+  ve model dosyalarını (Hugging Face, GitHub) yükleyebilir. Satır içi betik çalışmaz.
+  Model inmiyorsa README.md içindeki "Sorun giderme" bölümüne bak.
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; connect-src 'self' https://cdn.jsdelivr.net https://huggingface.co https://*.huggingface.co https://*.hf.co https://raw.githubusercontent.com; style-src 'self'; img-src 'self' data:; manifest-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="theme-color" content="#120b2e">
+<title>AURAI Asistan</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="uygulama" id="uygulama" hidden>
+  <header class="ust">
+    <div>
+      <h1 id="asistanBaslik">AURAI</h1>
+      <p class="model-durum" id="modelDurum" data-durum="kapali">Yapay zeka kapalı</p>
+    </div>
+    <button type="button" class="ikon-btn" id="ayarBtn">Ayarlar</button>
+  </header>
+
+  <section class="mesajlar" id="mesajlar" aria-live="polite" aria-label="Sohbet"></section>
+
+  <section class="model-kart" id="modelKart" aria-labelledby="modelKartBaslik">
+    <h2 id="modelKartBaslik">Yapay zekayı başlat</h2>
+    <p id="modelKartAciklama">Model bir kez indirilir ve cihazında çalışır; sorularının cevabı için internet gerekmez. Wi‑Fi önerilir.</p>
+    <label for="modelSec">Model</label>
+    <select id="modelSec"></select>
+    <button type="button" class="birincil" id="indirBtn">Yapay zekayı indir ve başlat</button>
+    <progress id="ilerleme" max="1" value="0" hidden></progress>
+    <p class="kart-yazi" id="ilerlemeYazi" role="status"></p>
+  </section>
+
+  <label class="cagri-secenek" for="surekliKutu">
+    <input type="checkbox" id="surekliKutu">
+    <span>Sayfa açıkken “Merhaba <span id="cagriAd">AURAI</span>” diye çağır (deneysel)</span>
+  </label>
+
+  <div class="hizli"><button type="button" id="googleBtn">Google'da ara</button></div>
+
+  <form class="giris" id="girisFormu" autocomplete="off">
+    <button type="button" class="mik" id="mikBtn" aria-label="Sesle konuş" aria-pressed="false">
+      <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-6a3.5 3.5 0 0 0-7 0v6A3.5 3.5 0 0 0 12 15Zm6-3.5a1 1 0 1 0-2 0 4 4 0 0 1-8 0 1 1 0 1 0-2 0 6 6 0 0 0 5 5.91V20H9.5a1 1 0 1 0 0 2h5a1 1 0 1 0 0-2H13v-2.59A6 6 0 0 0 18 11.5Z"/>
+      </svg>
+    </button>
+    <input type="text" id="girdi" placeholder="Bir şey yaz ya da mikrofona dokun" maxlength="500" aria-label="Mesajın">
+    <button type="submit" class="birincil" id="gonderBtn">Gönder</button>
+  </form>
+  <p class="durum-satiri" id="durumSatiri" role="status"></p>
+</main>
+
+<div class="kayit" id="kayitEkrani" hidden>
+  <form id="kayitFormu" class="kayit-formu">
+    <h2>Hoş geldin</h2>
+    <p>Adın, soyadın ve asistanının adı yalnızca bu cihazda saklanır; hiçbir sunucuya gönderilmez. Sesle konuşursan Chrome, sesi Google'ın ses tanıma servisine gönderir. Yapay zeka modeli ilk kullanımda internetten indirilir.</p>
+    <label for="kayitAd">Adın</label>
+    <input type="text" id="kayitAd" maxlength="40" required autocomplete="given-name">
+    <label for="kayitSoyad">Soyadın</label>
+    <input type="text" id="kayitSoyad" maxlength="40" required autocomplete="family-name">
+    <label for="kayitAsistanAdi">Asistanının adı</label>
+    <input type="text" id="kayitAsistanAdi" maxlength="24" value="AURAI" required>
+    <label class="onay" for="kayitOnay">
+      <input type="checkbox" id="kayitOnay" required>
+      <span>Yukarıdakileri okudum, kişisel verilerimin bu cihazda işlenmesini kabul ediyorum.</span>
+    </label>
+    <button type="submit" class="birincil">Kaydet ve başla</button>
+  </form>
+</div>
+
+<dialog id="ayarKutusu" class="ayar-kutusu" aria-labelledby="ayarBaslik">
+  <h2 id="ayarBaslik">Ayarlar</h2>
+  <label class="onay" for="sesliCevapKutu">
+    <input type="checkbox" id="sesliCevapKutu">
+    <span>Cevapları sesli oku</span>
+  </label>
+  <label for="sesSec">Ses</label>
+  <select id="sesSec"></select>
+  <label for="tonSec">Ses tonu</label>
+  <select id="tonSec">
+    <option value="normal">Normal</option>
+    <option value="canli">Canlı</option>
+    <option value="tok">Tok</option>
+  </select>
+  <button type="button" id="sesDeneBtn">Sesi dene</button>
+  <label for="ayarModelSec">Model (değiştirince sayfa yenilenir)</label>
+  <select id="ayarModelSec"></select>
+  <p class="kart-yazi">
+    AURAI, tarayıcıda çalışan açık kaynaklı WebLLM ve Alibaba'nın Apache-2.0 lisanslı Qwen modelleriyle çalışır. Yazdıkların cihazından çıkmaz; sohbet geçmişi kaydedilmez.
+    Telefonu kendi başına kontrol etmez: arama ve mesajın son onayını sen verirsin.
+  </p>
+  <p class="kart-yazi">
+    <a href="https://claude.ai/artifact/DrRfFqxgPsJp7HPJmgUqF3" target="_blank" rel="noopener noreferrer">Claude'lu sürümü aç</a>
+    (claude.ai'de açılır, Claude hesabı gerekir; bağlantı şu an sadece hesabı sahibine açık.)
+  </p>
+  <div class="ayar-butonlar">
+    <button type="button" id="verileriSilBtn">Verilerimi sil</button>
+    <button type="button" class="birincil" id="ayarKapatBtn">Kapat</button>
+  </div>
+</dialog>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
