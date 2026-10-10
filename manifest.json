@@ -1,0 +1,12 @@
+{
+  "name": "XMAX Asistan",
+  "short_name": "XMAX",
+  "description": "Türkçe yerli ve milli telefon asistanı",
+  "start_url": "./asistan-arayuz.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f1115",
+  "theme_color": "#0f1115",
+  "lang": "tr-TR",
+  "icons": []
+}
