@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101319">
+  <meta name="description" content="AURAI — Türkçe öncelikli, API destekli yapay zekâ asistanı.">
+  <title>AURAI — Türkçe Yapay Zekâ</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-row">
+        <div class="brand-mark" aria-hidden="true"><span>A</span><i></i></div>
+        <div class="brand-copy"><strong>AURAI</strong><small>Türkçe zekâ, açık ufuk.</small></div>
+      </div>
+      <button class="new-chat" id="newChatBtn"><span aria-hidden="true">＋</span> Yeni sohbet</button>
+      <div class="side-label">ÇALIŞMA ALANI</div>
+      <button class="side-action active" id="chatModeBtn"><span class="side-icon">◉</span> Sohbet <span class="side-dot"></span></button>
+      <button class="side-action" id="searchModeBtn"><span class="side-icon">⌕</span> Web'de ara</button>
+      <div class="side-divider"></div>
+      <div class="side-label">SON SOHBETLER <button class="tiny-icon" id="clearHistoryBtn" title="Sohbet geçmişini temizle" aria-label="Sohbet geçmişini temizle">⌫</button></div>
+      <div class="history-list" id="historyList"><p class="history-empty">Sohbetlerin burada görünür.</p></div>
+      <div class="sidebar-spacer"></div>
+      <section class="local-card">
+        <div class="local-card-top"><span class="pulse" id="modelPulse"></span><strong>Yapay zekâ API’si</strong><span class="privacy-lock">▣</span></div>
+        <p id="modelStatus">Bağlantı kontrol ediliyor…</p>
+        <button id="modelDetailsBtn" class="text-link">Durumu görüntüle <span>↗</span></button>
+      </section>
+      <div class="sidebar-footer"><span class="flag-dot">🇹🇷</span> Türkçe öncelikli proje <span class="version">v0.1.0</span></div>
+    </aside>
+
+    <main class="main-panel">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenuBtn" aria-label="Menüyü aç">☰</button>
+        <div class="topbar-title"><span class="topbar-eyebrow">AURAI / LAB</span><span id="topbarMode">Sohbet alanı</span></div>
+        <div class="topbar-actions"><span class="secure-label"><span class="secure-dot"></span> Sunucu üzerinden API</span><button class="icon-button" id="themeBtn" title="Görünümü değiştir" aria-label="Görünümü değiştir">◐</button></div>
+      </header>
+
+      <section class="conversation" id="conversation" aria-live="polite">
+        <div class="welcome" id="welcome">
+          <div class="welcome-emblem"><div class="emblem-ring ring-one"></div><div class="emblem-ring ring-two"></div><div class="emblem-core">A<span>✦</span></div><div class="orbit-dot dot-one"></div><div class="orbit-dot dot-two"></div><div class="orbit-dot dot-three"></div></div>
+          <div class="welcome-kicker"><span class="kicker-line"></span> YENİ NESİL TÜRKÇE ASİSTAN <span class="kicker-line"></span></div>
+          <h1>Merhaba, ben <span>AURAI.</span></h1>
+          <p class="welcome-description">Fikirleri birlikte büyütelim. Sor, üret, araştır; bilmediğim yerde kaynak arayayım.</p>
+          <div class="suggestion-grid">
+            <button class="suggestion-card" data-prompt="AURAI projesinin yol haritasını birlikte çıkaralım."><span class="suggestion-icon violet">✳</span><span><strong>Bir fikir geliştirelim</strong><small>Bir projeyi adım adım planla</small></span><span class="suggestion-arrow">↗</span></button>
+            <button class="suggestion-card" data-prompt="Bana anlaşılır bir şekilde bir yapay zekâ nasıl çalışır anlat."><span class="suggestion-icon blue">⌘</span><span><strong>Bir konuyu öğrenelim</strong><small>Karmaşık şeyleri sadeleştir</small></span><span class="suggestion-arrow">↗</span></button>
+            <button class="suggestion-card" data-prompt="HTML, CSS ve JavaScript ile temiz, güvenli bir örnek proje oluştur."><span class="suggestion-icon amber">⌁</span><span><strong>Kod yazalım</strong><small>Bir fikri çalışan ürüne dönüştür</small></span><span class="suggestion-arrow">↗</span></button>
+            <button class="suggestion-card" data-prompt="Türkiye'deki yapay zekâ ekosistemini güncel kaynaklarla özetle." data-web="true"><span class="suggestion-icon red">⌕</span><span><strong>Kaynaklarla araştır</strong><small>Web sonuçlarını karşılaştır</small></span><span class="suggestion-arrow">↗</span></button>
+          </div>
+          <p class="welcome-footnote"><span>✦</span> AURAI gelişmeye açık bir başlangıç sürümüdür; cevaplarını gerektiğinde doğrulamayı unutma.</p>
+        </div>
+        <div class="message-list" id="messageList"></div>
+      </section>
+
+      <footer class="composer-area">
+        <form class="composer" id="composerForm">
+          <button type="button" id="attachBtn" class="composer-plus" title="Bu sürümde dosya ekleme kapalı" aria-label="Dosya ekleme kullanılamıyor">＋</button>
+          <textarea id="messageInput" rows="1" maxlength="12000" placeholder="AURAI'ye bir şey sor…" aria-label="Mesajın" required></textarea>
+          <div class="composer-tools"><label class="web-toggle" title="İnternetten kaynak ara"><input type="checkbox" id="webToggle"><span class="toggle-track"><span></span></span><span>Web'de ara</span></label><span class="composer-divider"></span><button type="submit" class="send-button" id="sendBtn" aria-label="Mesajı gönder"><span>↑</span></button></div>
+        </form>
+        <div class="composer-meta"><span>Enter ile gönder <i>·</i> Shift + Enter ile satır aç</span><span><b>◆</b> Model ve donanım cevap kalitesini etkiler</span></div>
+      </footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="modal-backdrop" id="statusModal" hidden>
+    <section class="status-modal" role="dialog" aria-modal="true" aria-labelledby="statusTitle">
+      <button class="modal-close" id="closeModalBtn" aria-label="Kapat">×</button>
+      <div class="modal-icon">⌘</div><p class="modal-overline">SİSTEM DURUMU</p><h2 id="statusTitle">AURAI çalışma bilgileri</h2>
+      <div class="status-rows" id="statusRows"><p>Bilgiler alınıyor…</p></div>
+      <p class="modal-note">Yanıtlar, anahtarı sunucu tarafındaki .env dosyasında tutulan Z.AI API üzerinden üretilir. Anahtarı tarayıcı koduna veya herkese açık GitHub deposuna koyma.</p>
+      <button class="modal-primary" id="refreshStatusBtn">Durumu yenile <span>↻</span></button>
+    </section>
+  </div>
+</body>
+</html>
